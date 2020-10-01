@@ -60,10 +60,10 @@ namespace API.Services
                     DateTimeOffset expiryDate = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(Convert.ToInt64(expiryClaim, CultureInfo.InvariantCulture));
 
                     if (expiryDate > DateTime.UtcNow)
-                        result.Result = email;
+                        result.Result = string.Format("Please proceed to reset password for {0}", email);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return result;
             }

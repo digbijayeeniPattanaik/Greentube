@@ -19,7 +19,7 @@
                 case 400: errorResponse = "A bad request, you have made"; break;
                 case 401: errorResponse = "Authorized, you are not"; break;
                 case 404: errorResponse = "Resource found, it was not"; break;
-                case 500: errorResponse = "Errors are the path to the dark side. Errors lead to anger. Anger leads to hate. hate leads to career change"; break;
+                case 500: errorResponse = "An error occured. Please contact administrator"; break;
                 default:
                     errorResponse = null;
                     break;

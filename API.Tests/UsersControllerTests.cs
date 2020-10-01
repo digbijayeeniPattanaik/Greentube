@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace API.Tests
 {
     [TestClass]
-    public class UsersController
+    public class UsersControllerTests
     {
         private Mock<IEmailSender> _mockEmailSender;
         private Mock<ITokenService> _mockTokenService;
@@ -89,7 +89,7 @@ namespace API.Tests
 
             OkObjectResult actionResult = result as OkObjectResult;
             Assert.AreEqual(200, actionResult.StatusCode);
-            Assert.AreEqual("Test@gmail.com", actionResult.Value);
+            Assert.AreEqual("Please proceed to reset password for Test@gmail.com", string.Format("Please proceed to reset password for {0}",actionResult.Value));
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
         }
