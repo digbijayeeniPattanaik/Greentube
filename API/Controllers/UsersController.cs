@@ -51,17 +51,19 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> ResetPassword([FromRoute] string token)
         {
-            var validate = await Task.FromResult(_tokenService.ValidateToken(token));
+            var validate = _tokenService.ValidateToken(token);
             if (validate.Successful)
             {
-                LoginByEmailAddress(validate.Result);
+                await LoginByEmailAddress(validate.Result);
                 return Ok(validate.Result);
             }
             return Unauthorized(validate.ErrorMessage);
         }
 
-        private void LoginByEmailAddress(string email)
-        { 
+
+        public async Task LoginByEmailAddress(string email)
+        {
+            await Task.FromResult(Ok(email));
         }
 
     }
