@@ -60,8 +60,7 @@ namespace API.Controllers
             return Unauthorized(validate.ErrorMessage);
         }
 
-
-        public async Task LoginByEmailAddress(string email)
+        private async Task LoginByEmailAddress(string email)
         {
             await Task.FromResult(Ok(email));
         }
