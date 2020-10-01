@@ -34,7 +34,7 @@ namespace API
             set
             {
                 _result = value;
-                if (value != null && !string.IsNullOrWhiteSpace(_errorMessage) && _errorMessage.Equals(_defaultMessage, StringComparison.InvariantCultureIgnoreCase)) _errorMessage = string.Empty;
+                if (value != null && !string.IsNullOrWhiteSpace(_errorMessage)) _errorMessage = string.Empty;
             }
         }
     }

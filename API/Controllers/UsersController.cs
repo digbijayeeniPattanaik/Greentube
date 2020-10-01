@@ -5,16 +5,20 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {
         private readonly IEmailSender _emailSender;
+        private readonly ITokenService _tokenService;
 
-        public UsersController(IEmailSender emailSender)
+        public UsersController(IEmailSender emailSender, ITokenService tokenService)
         {
-            this._emailSender = emailSender;
+            _emailSender = emailSender;
+            _tokenService = tokenService;
         }
+
+
         [HttpPost("forgotPassword")]
         public async Task<ActionResult> ForgotPassword([FromBody]ForgotPassword forgotPassword)
         {
@@ -29,5 +33,22 @@ namespace API.Controllers
 
             return BadRequest();
         }
+
+        [HttpPost("resetPassword/{token}")]
+        public async Task<ActionResult> ResetPassword([FromRoute] string token)
+        {
+            var validate = await Task.FromResult(_tokenService.ValidateToken(token));
+            if (validate.Successful)
+            {
+                LoginByEmailAddress(validate.Result);
+                return Ok(validate.Result);
+            }
+            return Unauthorized("Unauthorised");
+        }
+
+        private void LoginByEmailAddress(string email)
+        { 
+        }
+
     }
 }
