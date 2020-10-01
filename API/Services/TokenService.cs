@@ -48,17 +48,24 @@ namespace API.Services
         {
             var stream = token;
             var handler = new JwtSecurityTokenHandler();
-            JwtSecurityToken securityToken = handler.ReadJwtToken(stream);
-            var result = new Outcome<string>("Invalid token");
-            if (securityToken != null && securityToken.Claims != null && securityToken.Claims.Any())
+            var result = new Outcome<string>("Invalid Url");
+            try
             {
-                var email = securityToken.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.Email).Value;
+                JwtSecurityToken securityToken = handler.ReadJwtToken(stream);
+                if (securityToken != null && securityToken.Claims != null && securityToken.Claims.Any())
+                {
+                    var email = securityToken.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.Email).Value;
 
-                var expiryClaim = securityToken.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.Exp).Value;
-                DateTimeOffset expiryDate = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(Convert.ToInt64(expiryClaim, CultureInfo.InvariantCulture));
+                    var expiryClaim = securityToken.Claims.First(claim => claim.Type == JwtRegisteredClaimNames.Exp).Value;
+                    DateTimeOffset expiryDate = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(Convert.ToInt64(expiryClaim, CultureInfo.InvariantCulture));
 
-                if (expiryDate >  DateTime.UtcNow)
-                    result.Result = email;
+                    if (expiryDate > DateTime.UtcNow)
+                        result.Result = email;
+                }
+            }
+            catch(Exception ex)
+            {
+                return result;
             }
 
             return result;

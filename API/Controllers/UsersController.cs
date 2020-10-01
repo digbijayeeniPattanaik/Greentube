@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using API.Model;
 using API.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -18,8 +20,14 @@ namespace API.Controllers
             _tokenService = tokenService;
         }
 
-
+        /// <summary>
+        /// Forgot password
+        /// </summary>
+        /// <param name="forgotPassword"></param>
+        /// <returns><seealso cref="string"/></returns>
         [HttpPost("forgotPassword")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> ForgotPassword([FromBody]ForgotPassword forgotPassword)
         {
             if (ModelState.IsValid)
@@ -30,11 +38,17 @@ namespace API.Controllers
 
                 return Ok("Email sent successfully");
             }
-
             return BadRequest();
         }
 
+        /// <summary>
+        /// Reset password
+        /// </summary>
+        /// <param name="token">token</param>
+        /// <returns><seealso cref="string"/></returns>
         [HttpPost("resetPassword/{token}")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> ResetPassword([FromRoute] string token)
         {
             var validate = await Task.FromResult(_tokenService.ValidateToken(token));
@@ -43,7 +57,7 @@ namespace API.Controllers
                 LoginByEmailAddress(validate.Result);
                 return Ok(validate.Result);
             }
-            return Unauthorized("Unauthorised");
+            return Unauthorized(validate.ErrorMessage);
         }
 
         private void LoginByEmailAddress(string email)

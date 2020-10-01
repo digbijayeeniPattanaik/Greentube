@@ -20,8 +20,8 @@ namespace API.Services
         {
             var path = _configuration["FilePath"];
 
-            var token = _tokenService.CreateToken(email , RandomString(10));
-            var loginUrl = string.Format("{0}{1}{2}", _configuration["ApiUrl"] , "resetPassword/" , token);
+            var token = _tokenService.CreateToken(email, RandomString(5));
+            var loginUrl = string.Format("{0}{1}", _configuration["resetPasswordUrl"], token);
             string text = string.Format(@"Dear player,
 In order to log in to your account so you can change your password click the following link:
 
